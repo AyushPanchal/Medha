@@ -8,4 +8,7 @@
 - Manually cleared all the markdown data.
 
 # Date : 06/10/2025
-- Collected scholar pages of all the CS Department faculties
+- Collected scholar pages of all the CS Department faculties.
+- Scrapped all the scholar pages and stored them into respective faculty name markdowns.
+- Created faiss index, and ingested a single markdown into faiss vector store with `sentence-transformers/all-mpnet-base-v2`.
+- Also ran few queries on faiss vector store.
