@@ -56,6 +56,6 @@ def pretty_print(results: List[Tuple[str, float, dict]]):
 
 
 if __name__ == "__main__":
-    question = "Who is the head of the department ?"
+    question = "Who is the hod?"
     results = query_vectorstore(question, k=TOP_K)
     pretty_print(results)
