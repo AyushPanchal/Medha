@@ -4,11 +4,15 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from langchain_community.document_loaders import UnstructuredMarkdownLoader
+from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class IngestionPipeline:
     """
@@ -41,6 +45,7 @@ class IngestionPipeline:
         loader_mode: str = "single",
         loader_strategy: str = "fast",
         embedding_model_name: str = "sentence-transformers/all-mpnet-base-v2",
+        use_open_ai_embeddings: bool = False,
     ):
         self.md_dir = Path(md_dir)
         self.persist_dir = Path(persist_dir)
@@ -58,8 +63,12 @@ class IngestionPipeline:
         )
 
         # Initialize the embedding model; this downloads/loads the HF model on first use.
-        self.embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model_name)
-
+        if not use_open_ai_embeddings:
+            print("[USING] Hugging Face embedding model")
+            self.embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model_name)
+        else:
+            print("[USING] OpenAI embedding model")
+            self.embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
         self.vectordb: Optional[FAISS] = None
 
     def _discover_files(self) -> List[Path]:

@@ -16,4 +16,14 @@
 # Date : 08/10/2025
 - Ingested all the markdown files into faiss vector store. Created an Ingestion Pipeline for that
 - Created and tested Groq LLM.
-- 
+- Created a FAISS Retriever and tested it.
+
+# Date : 09/10/2025
+- Ingested all the markdown files into faiss vector store. Created an Ingestion Pipeline for that.
+- Created metadata for all the markdowns using llm, and ingested it into faiss database.
+- Retrieval quality was still lower after ingesting the metadata.
+- Created langgraph dev environment.
+
+# Date : 10/10/2025
+- Changed the embeddings with OpenAI Embeddings
+- Retrieval quality is good with open ai.
