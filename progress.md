@@ -27,3 +27,8 @@
 # Date : 10/10/2025
 - Changed the embeddings with OpenAI Embeddings
 - Retrieval quality is good with open ai.
+
+# Date : 11/10/2025
+- Created langgraph json file.
+- updated chatbot state.
+- created faiss retriever node to attach it in graph.

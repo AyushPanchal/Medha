@@ -7,7 +7,9 @@ Every node in the graph receives and returns this same state instance,
 ensuring consistent data flow between retriever, generator, reranker, etc.
 """
 
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Dict
+
+from langgraph.graph import add_messages
 from pydantic import BaseModel, Field
 
 
@@ -21,19 +23,20 @@ class ChatbotState(BaseModel):
         context (Optional[str]): Retrieved context from FAISS or other sources.
         answer (Optional[str]): Final or intermediate answer from the LLM.
         source_docs (Optional[List[Any]]): Raw retrieved documents (for debugging or citations).
-        metadata (Optional[dict]): Optional info like model names, confidence, etc.
     """
 
     question: str = Field(..., description="User's input question.")
     context: Optional[str] = Field(default=None, description="Retrieved context text.")
     answer: Optional[str] = Field(default=None, description="Generated answer from LLM.")
     source_docs: Optional[List[Any]] = Field(default=None, description="Retrieved documents from retriever.")
-    metadata: Optional[dict] = Field(default_factory=dict, description="Optional metadata for diagnostics.")
+
+    messages: List[Any] = Field(default_factory=list, description="Full conversation history (AI + Human).")
 
     class Config:
-        arbitrary_types_allowed = True
-        validate_assignment = True
-        extra = "ignore"
+        # Define how to combine multiple states for each field
+        reducers = {
+            "messages": add_messages,
+        }
 
     def summary(self) -> str:
         """Return a human-readable summary of current state."""

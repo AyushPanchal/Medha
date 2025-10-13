@@ -8,6 +8,8 @@ for a user's question. Works seamlessly with ChatbotState objects.
 
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
+
 from src.states.chatbot_state import ChatbotState
 import os
 
@@ -16,8 +18,9 @@ class FaissRetrieverNode:
     def __init__(
         self,
         index_path: str = "../../data/indexes/faiss",
-        model_name: str = "sentence-transformers/all-mpnet-base-v2",
+        model_name: str = "text-embedding-3-large",
         k: int = 5,
+        use_open_ai_embeddings: bool = True
     ):
         """
         Initialize FAISS retriever node.
@@ -31,8 +34,11 @@ class FaissRetrieverNode:
         self.model_name = model_name
         self.k = k
 
-        # Initialize embeddings
-        self.embeddings = HuggingFaceEmbeddings(model_name=self.model_name)
+        if use_open_ai_embeddings:
+            self.embeddings = OpenAIEmbeddings(model=self.model_name)
+        else:
+            # Initialize embeddings
+            self.embeddings = HuggingFaceEmbeddings(model_name=self.model_name)
 
         # Load FAISS store
         if not os.path.exists(index_path):
@@ -64,11 +70,7 @@ class FaissRetrieverNode:
         docs = self.vectorstore.similarity_search(state.question, k=self.k)
         context = "\n\n".join([doc.page_content for doc in docs])
 
-        # Update and return state
-        state.context = context
-        state.source_docs = docs
-
         print(f"🔍 Retrieved {len(docs)} documents for query: '{state.question[:60]}...'")
-        return state
+        return ChatbotState(context=context, source_docs=docs, question=state.question)
 
 

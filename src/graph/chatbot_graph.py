@@ -1,39 +1,40 @@
 from langgraph.graph import StateGraph, END
+
+from src.llms.groq_llm import GroqLLM
 from src.nodes.faiss_retriever_node import FaissRetrieverNode
+from src.nodes.chatbot_node import ChatbotNode
 from src.states.chatbot_state import ChatbotState
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class ChatbotGraph:
     def __init__(self):
-        # Initialize the graph with the ChatbotState
         self.graph = StateGraph(ChatbotState)
+        self.llm = GroqLLM().get_qwen32b(temperature=0.0)
 
     def build_graph(self):
-        faiss_retriever_node = FaissRetrieverNode(index_path="data/indexes/faiss")
+        retriever = FaissRetrieverNode(index_path="../../data/indexes/open_ai/faiss")
 
-        # Add nodes
-        self.graph.add_node("retriever", faiss_retriever_node.process)
+        chatbot = ChatbotNode(llm=self.llm)
 
-        # Define edges
+        self.graph.add_node("retriever", retriever.process)
+        self.graph.add_node("chatbot", chatbot.process)
+
         self.graph.set_entry_point("retriever")
-        self.graph.add_edge("retriever", END)
+        self.graph.add_edge("retriever", "chatbot")
+        self.graph.add_edge("chatbot", END)
 
-        # Compile the graph
-        compiled_graph = self.graph.compile()
-        return compiled_graph
+        return self.graph.compile()
 
 
-# ================================
-# Top-level graph for LangGraph
-# ================================
-builder = ChatbotGraph()
-app = builder.build_graph()  # <- Exposed at top-level
-
-# ================================
-# Optional example run
-# ================================
 if __name__ == "__main__":
-    query = "What is the admission process for M.Tech CSE?"
-    state = ChatbotState(question=query)
+    app = ChatbotGraph().build_graph()
+
+    # 🗨️ First turn
+    state = ChatbotState(question="Who is head of the department?")
     result = app.invoke(state)
-    print("Final Output:\n", result)
+
+    print("\n💬 Assistant:", result["answer"])

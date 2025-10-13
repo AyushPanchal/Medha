@@ -3,7 +3,7 @@
     "."
   ],
   "graphs": {
-    "medical_assistant" : "src/graph/chatbot_graph.py:app"
+    "medha" : "src/langgraph_execs/chatbot_graph.py:app"
   },
   "env": ".env",
   "python_version": "3.13"
