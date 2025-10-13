@@ -32,3 +32,6 @@
 - Created langgraph json file.
 - updated chatbot state.
 - created faiss retriever node to attach it in graph.
+
+# Date : 13/10/2025
+- Working on generating questions and answers pair from the data, for better retrieval.

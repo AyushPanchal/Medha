@@ -16,7 +16,7 @@ class ChatbotGraph:
         self.llm = GroqLLM().get_qwen32b(temperature=0.0)
 
     def build_graph(self):
-        retriever = FaissRetrieverNode(index_path="../../data/indexes/open_ai/faiss")
+        retriever = FaissRetrieverNode(index_path="../../data/indexes/open_ai/faiss", k=5)
 
         chatbot = ChatbotNode(llm=self.llm)
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     app = ChatbotGraph().build_graph()
 
     # 🗨️ First turn
-    state = ChatbotState(question="Who is head of the department?")
+    state = ChatbotState(question="List down the all names of faculties whos research areas are in computer vision")
     result = app.invoke(state)
 
     print("\n💬 Assistant:", result["answer"])
