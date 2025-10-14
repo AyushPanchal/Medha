@@ -4,13 +4,14 @@ from src.ingestion.ingestion_pipeline import IngestionPipeline
 
 pipeline = IngestionPipeline(
     md_dir="../../data/processed/markdowns",
-    persist_dir="../../data/indexes/faiss",
+    persist_dir="../../data/indexes/open_ai/faiss",
     glob_pattern="**/*.md",
     chunk_size=1000,
     chunk_overlap=150,
     loader_mode="single",
     loader_strategy="fast",
     embedding_model_name="sentence-transformers/all-mpnet-base-v2",
+    use_open_ai_embeddings=True
 )
 
 # Build and persist

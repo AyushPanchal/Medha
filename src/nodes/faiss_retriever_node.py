@@ -71,6 +71,6 @@ class FaissRetrieverNode:
         context = "\n\n".join([doc.page_content for doc in docs])
 
         print(f"🔍 Retrieved {len(docs)} documents for query: '{state.question[:60]}...'")
-        return ChatbotState(context=context, source_docs=docs, question=state.question)
+        return ChatbotState(context=context, source_docs=docs, question=state.question, messages=state.messages)
 
 

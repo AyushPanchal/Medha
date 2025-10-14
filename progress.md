@@ -35,3 +35,8 @@
 
 # Date : 13/10/2025
 - Working on generating questions and answers pair from the data, for better retrieval.
+
+# Date : 14/10/2025
+- Created prompt loader and converted 1 prompt into markdown file.
+- Introduced memory to our chatbot.
+- Introduced query reformulation for user asked questions for standalone similarity search.
