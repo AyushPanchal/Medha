@@ -5,13 +5,13 @@ from src.states.chatbot_state import ChatbotState
 
 class QueryReformulatorNode:
     def __init__(self, llm):
-        self.llm = llm  # a language model instance you control
+        self.llm = llm
 
     def process(self, state: ChatbotState) -> ChatbotState:
         # Compose a prompt for reformulation
         history = "\n".join(msg.content for msg in state.messages) if state.messages else ""
         prompt = (
-            "Given the conversation history and the last user question, rewrite the question "
+            "Given the conversation history and the last user question, rewrite the question. No preamble just pure question "
             "to be fully self-contained without pronouns.\n\n"
             f"Conversation history:\n{history}\n\n"
             f"User's last question: {state.question}\n\n"

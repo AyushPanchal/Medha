@@ -40,3 +40,9 @@
 - Created prompt loader and converted 1 prompt into markdown file.
 - Introduced memory to our chatbot.
 - Introduced query reformulation for user asked questions for standalone similarity search.
+
+# Date : 16/10/2025
+- Updated the query reformulator to only give pure questions without any preamble.
+- Created flask endpoint for graph.
+- Created streamlit ui for chatbot.
+
